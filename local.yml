@@ -1,6 +1,6 @@
 services:
   gluetun:
-    image: qmcgaw/gluetun:v3.39.1
+    image: qmcgaw/gluetun:latest
     container_name: gluetun
     # line above must be uncommented to allow external containers to connect.
     # See https://github.com/qdm12/gluetun-wiki/blob/main/setup/connect-a-container-to-gluetun.md#external-container-to-gluetun
@@ -36,7 +36,7 @@ services:
       - UPDATER_PERIOD=24h
       - SERVER_COUNTRIES=United States
   prowlarr:
-    image: lscr.io/linuxserver/prowlarr:1.27.0
+    image: lscr.io/linuxserver/prowlarr:latest
     container_name: prowlarr
     network_mode: "service:gluetun"
     environment:
@@ -60,7 +60,7 @@ services:
       - TZ=America/Louisville
       - PUID=${PUID}
       - PGID=${PGID}
-    image: lscr.io/linuxserver/radarr:5.15.1
+    image: lscr.io/linuxserver/radarr:latest
     depends_on:
       - gluetun
   sonarr:
@@ -75,11 +75,11 @@ services:
       - TZ=America/Louisville
       - PUID=${PUID}
       - PGID=${PGID}
-    image: lscr.io/linuxserver/sonarr:4.0.11
+    image: lscr.io/linuxserver/sonarr:latest
     depends_on:
       - gluetun
   qbittorrent:
-    image: lscr.io/linuxserver/qbittorrent:5.0.2
+    image: lscr.io/linuxserver/qbittorrent:latest
     container_name: qbittorrent
     network_mode: "service:gluetun"
     environment:
@@ -94,7 +94,7 @@ services:
     depends_on:
       - gluetun
   jellyfin:
-    image: lscr.io/linuxserver/jellyfin:10.10.3
+    image: lscr.io/linuxserver/jellyfin:latest
     container_name: jellyfin
     environment:
       - TZ=America/Louisville

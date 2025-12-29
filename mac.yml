@@ -94,22 +94,22 @@ services:
     restart: unless-stopped
     depends_on:
       - gluetun
-  jellyfin:
-    image: lscr.io/linuxserver/jellyfin:latest
-    container_name: jellyfin
-    networks:
-      - homelab
-    environment:
-      - TZ=America/Louisville
-      - PUID=${PUID}
-      - PGID=${PGID}
-      - UMASK_SET=022 # optional
-    volumes:
-      - ./config/jellyfin:/config
-      - ./data/media:/data/media
-    ports:
-      - 8096:8096
-    restart: unless-stopped
+  # jellyfin:
+  #   image: lscr.io/linuxserver/jellyfin:latest
+  #   container_name: jellyfin
+  #   networks:
+  #     - homelab
+  #   environment:
+  #     - TZ=America/Louisville
+  #     - PUID=${PUID}
+  #     - PGID=${PGID}
+  #     - UMASK_SET=022 # optional
+  #   volumes:
+  #     - ./config/jellyfin:/config
+  #     - ./data/media:/data/media
+  #   ports:
+  #     - 8096:8096
+  #   restart: unless-stopped
   flaresolverr:
     image: flaresolverr/flaresolverr:latest
     network_mode: "service:gluetun"

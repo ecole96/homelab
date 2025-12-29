@@ -7,16 +7,16 @@ credentials-file: /etc/cloudflared/<TUNNEL_ID>.json
 
 ingress:
   # Radarr (make sure firewall allows port 7878 traffic)
-  - hostname: radarr.<DOMAIN>
-    service: http://<LOCAL_IP>:7878
+  - hostname: <RADARR_DOMAIN>
+    service: http://gluetun:7878
 
   # Sonarr (make sure firewall allows port 8989 traffic)
-  - hostname: sonarr.<DOMAIN>
-    service: http://<LOCAL_IP>:8989
+  - hostname: <SONARR_DOMAIN>
+    service: http://gluetun:8989
 
   # Jellyfin (direct, it has its own network)
-  - hostname: jellyfin.<DOMAIN>
-    service: http://jellyfin:8096
+  - hostname: <JELLYFIN_DOMAIN>
+    service: http://<JELLYFIN_HOST>:8096
 
   # Default catch-all
   - service: http_status:404
