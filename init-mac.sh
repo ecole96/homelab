@@ -14,6 +14,7 @@ mkdir -p ./config/qbittorrent
 mkdir -p ./config/radarr
 mkdir -p ./config/sonarr
 mkdir -p ./config/cloudflared
+mkdir -p ./config/clipcascade
 
 # initialize content folders
 mkdir -p ./data/media/movies
