@@ -10,7 +10,7 @@
 5. In the project directory, run `init.sh` to create the application and media directories (you may need [Git Bash](https://git-scm.com/downloads) on Windows)
 
 6. Start the stack: `docker compose -f <your-compose-file-here.yml> up -d`
-    - `local.yml` is for use on a home computer, `prod.yml` for servers (includes [NGINX Proxy Manager](https://nginxproxymanager.com/) as a web proxy and [Portainer](https://www.portainer.io/) as a Docker web interface), `mac.yml` is a Mac Mini
+    - Use `mac.yml` for now.
     - Web applications (Radarr, Sonarr, Prowlarr, qBittorrent) are accessible in your browser at `<device-ip>:<host-port>` (host ports by app are found under the `ports` block in the `gluetun` and `jellyfin` sections - it is the number before the colon `:`). If accessed from the same computer they're running on, `localhost:<host-port>` should work. Example, Jellyfin: `localhost:8096`
 
 7. Configure the launched stack:
