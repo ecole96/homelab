@@ -132,17 +132,18 @@ services:
       - ./config/portainer:/data
       - /var/run/docker.sock:/var/run/docker.sock
     restart: unless-stopped
-  # cloudflared:
-  #   image: cloudflare/cloudflared:2025.11.1
-  #   container_name: cloudflared
-  #   restart: unless-stopped
-  #   networks:
-  #     - homelab
-  #   volumes:
-  #     - ./config/cloudflared/config.yml:/etc/cloudflared/config.yml:ro
-  #     - ./config/cloudflared/${TUNNEL_ID}.json:/etc/cloudflared/${TUNNEL_ID}.json:ro
-  #   command: tunnel --no-autoupdate run
+  cloudflared:
+    image: cloudflare/cloudflared:2025.11.1
+    container_name: cloudflared
+    restart: unless-stopped
+    networks:
+      - homelab
+    volumes:
+      - ./config/cloudflared/config.yml:/etc/cloudflared/config.yml:ro
+      - ./config/cloudflared/${TUNNEL_ID}.json:/etc/cloudflared/${TUNNEL_ID}.json:ro
+    command: tunnel --no-autoupdate run
   clipcascade:
+    container_name: clipcascade
     image: sathvikrao/clipcascade:0.7.0
     ports:
       - "8002:8080" 
@@ -150,7 +151,7 @@ services:
     volumes:
       - ./config/clipcascade:/database  # Persistent storage for user data
     environment:
-      - CC_MAX_MESSAGE_SIZE_IN_MiB=1   # Maximum message size in MiB (ignored if P2P mode is enabled)
+      - CC_MAX_MESSAGE_SIZE_IN_MiB=4  # Maximum message size in MiB (ignored if P2P mode is enabled)
       - CC_P2P_ENABLED=false  # Enables or disables peer-to-peer(P2P) mode
       # - CC_ALLOWED_ORIGINS=https://clipcascade.example.com  # Defines allowed CORS origins for security
       # - CC_SIGNUP_ENABLED=false  # Enables or disables user self-registration
