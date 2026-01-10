@@ -9,8 +9,7 @@
 
 5. In the project directory, run `init.sh` to create the application and media directories (you may need [Git Bash](https://git-scm.com/downloads) on Windows)
 
-6. Start the stack: `docker compose -f <your-compose-file-here.yml> up -d`
-    - Use `mac.yml` for now.
+6. Start the stack: `docker compose -f homelab.yml up -d`
     - Web applications (Radarr, Sonarr, Prowlarr, qBittorrent) are accessible in your browser at `<device-ip>:<host-port>` (host ports by app are found under the `ports` block in the `gluetun` and `jellyfin` sections - it is the number before the colon `:`). If accessed from the same computer they're running on, `localhost:<host-port>` should work. Example, Jellyfin: `localhost:8096`
 
 7. Configure the launched stack:
@@ -28,14 +27,14 @@
     **Prowlarr**
     1. Add Flaresolverr (Settings > Indexers)
     2. Add applications (Radarr, Sonarr - get API keys from each - Settings > General). 
-    3. Add indexers (use flaresolverr tag when needed).
+    3. Add indexers (use flaresolverr tag when needed, set see).
 
     **Radarr / Sonarr**  
     1. Verify hardlinks are set up and set root folder
         - Radarr: /data/media/movies
         - Sonarr: /data/media/tv
     2. Set up Qbittorrent (Download Clients).
-    3. Set up indexers (set Seed Time to 1) and set Maximum File Size in global indexer settings to reduce storage use.
+    3. Verify indexer settings imported from Prowlarr (including Seed Time) and set Maximum File Size in global indexer settings to reduce storage use.
 
     **qBittorrent**
     1. Set network interface to tun0
@@ -48,4 +47,4 @@
     *During configuration, keep every hostname reference as "localhost".
 
 ## Stop stack
-`docker compose -f <your-compose-file-here.yml> down`
+`docker compose -f homelab.yml down`
