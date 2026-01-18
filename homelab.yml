@@ -155,3 +155,13 @@ services:
       - CC_P2P_ENABLED=false  # Enables or disables peer-to-peer(P2P) mode
       # - CC_ALLOWED_ORIGINS=https://clipcascade.example.com  # Defines allowed CORS origins for security
       # - CC_SIGNUP_ENABLED=false  # Enables or disables user self-registration
+  open-webui:
+    image: ghcr.io/open-webui/open-webui:main
+    container_name: open-webui
+    restart: unless-stopped
+    environment:
+      - OLLAMA_BASE_URL=http://host.docker.internal:11434
+    ports:
+      - "11433:8080"
+    volumes:
+      - ./config/open-webui:/app/backend/data

@@ -2,10 +2,6 @@
 
 set -eu
 
-# reset dirs
-rm -rf ./config
-rm -rf ./data
-
 # initialize new config dirs
 mkdir -p ./config/jellyfin
 mkdir -p ./config/portainer
@@ -15,6 +11,7 @@ mkdir -p ./config/radarr
 mkdir -p ./config/sonarr
 mkdir -p ./config/cloudflared
 mkdir -p ./config/clipcascade
+mkdir -p ./config/open-webui
 
 # initialize content folders
 mkdir -p ./data/media/movies
