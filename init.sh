@@ -12,6 +12,11 @@ mkdir -p ./config/sonarr
 mkdir -p ./config/cloudflared
 mkdir -p ./config/clipcascade
 mkdir -p ./config/open-webui
+mkdir -p ./config/icloudpd
+mkdir -p ./config/immich-db
+mkdir -p ./config/icloudpd
+mkdir -p ./config/immich-db
+mkdir -p ./config/immich-machine-learning
 
 # initialize content folders
 mkdir -p ./data/media/movies
