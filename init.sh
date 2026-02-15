@@ -17,6 +17,7 @@ mkdir -p ./config/immich-db
 mkdir -p ./config/icloudpd
 mkdir -p ./config/immich-db
 mkdir -p ./config/immich-machine-learning
+mkdir -p ./config/immich-server
 
 # initialize content folders
 mkdir -p ./data/media/movies

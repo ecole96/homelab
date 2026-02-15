@@ -142,19 +142,19 @@ services:
       - ./config/cloudflared/config.yml:/etc/cloudflared/config.yml:ro
       - ./config/cloudflared/${TUNNEL_ID}.json:/etc/cloudflared/${TUNNEL_ID}.json:ro
     command: tunnel --no-autoupdate run
-  clipcascade:
-    container_name: clipcascade
-    image: sathvikrao/clipcascade:0.7.0
-    ports:
-      - "8002:8080" 
-    restart: unless-stopped
-    volumes:
-      - ./config/clipcascade:/database  # Persistent storage for user data
-    environment:
-      - CC_MAX_MESSAGE_SIZE_IN_MiB=4  # Maximum message size in MiB (ignored if P2P mode is enabled)
-      - CC_P2P_ENABLED=false  # Enables or disables peer-to-peer(P2P) mode
-      # - CC_ALLOWED_ORIGINS=https://clipcascade.example.com  # Defines allowed CORS origins for security
-      # - CC_SIGNUP_ENABLED=false  # Enables or disables user self-registration
+  # clipcascade:
+  #   container_name: clipcascade
+  #   image: sathvikrao/clipcascade:0.7.0
+  #   ports:
+  #     - "8002:8080" 
+  #   restart: unless-stopped
+  #   volumes:
+  #     - ./config/clipcascade:/database  # Persistent storage for user data
+  #   environment:
+  #     - CC_MAX_MESSAGE_SIZE_IN_MiB=4  # Maximum message size in MiB (ignored if P2P mode is enabled)
+  #     - CC_P2P_ENABLED=false  # Enables or disables peer-to-peer(P2P) mode
+  #     # - CC_ALLOWED_ORIGINS=https://clipcascade.example.com  # Defines allowed CORS origins for security
+  #     # - CC_SIGNUP_ENABLED=false  # Enables or disables user self-registration
   open-webui:
     image: ghcr.io/open-webui/open-webui:main
     container_name: open-webui
@@ -203,7 +203,7 @@ services:
     container_name: immich-server
     image: ghcr.io/immich-app/immich-server:${IMMICH_VERSION:-release}
     env_file:
-      - .immich.env
+      - .env
     # extends:
     #   file: hwaccel.transcoding.yml
     #   service: cpu # set to one of [nvenc, quicksync, rkmpp, vaapi, vaapi-wsl] for accelerated transcoding
@@ -211,6 +211,7 @@ services:
       # Do not edit the next line. If you want to change the media storage location on your system, edit the value of UPLOAD_LOCATION in the .env file
       - ${UPLOAD_LOCATION}:/data
       - /etc/localtime:/etc/localtime:ro
+      - ${ICLOUD_LIBRARY_PATH}:/icloud:ro
     ports:
       - '2283:2283'
     depends_on:
@@ -230,7 +231,7 @@ services:
     volumes:
       - ./config/immich-machine-learning:/cache
     env_file:
-      - .immich.env
+      - .env
     restart: unless-stopped
     healthcheck:
       disable: false
@@ -251,7 +252,7 @@ services:
       # Uncomment the DB_STORAGE_TYPE: 'HDD' var if your database isn't stored on SSDs
       # DB_STORAGE_TYPE: 'HDD'
     volumes:
-      # Do not edit the next line. If you want to change the database storage location on your system, edit the value of DB_DATA_LOCATION in the .immich.env file
+      # Do not edit the next line. If you want to change the database storage location on your system, edit the value of DB_DATA_LOCATION in the .env file
       - ${DB_DATA_LOCATION}:/var/lib/postgresql/data
     shm_size: 128mb
     restart: unless-stopped
