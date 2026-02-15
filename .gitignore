@@ -1,5 +1,4 @@
 .env
-.immich.env
 .DS_Store
 config/
 downloads/
