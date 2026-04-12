@@ -1,0 +1,22 @@
+# Ensure TUNNEL_ID, DOMAIN, and LOCAL_IP environment variables are defined in .env at project root before running init.sh
+# The script copies this file to the cloudflared config directory and replaces the placeholders with the ENV values
+# You must also put the credentials file (named TUNNEL_ID.json) in config/cloudflared before running the Docker stack
+
+tunnel: <TUNNEL_ID>
+credentials-file: /etc/cloudflared/<TUNNEL_ID>.json
+
+ingress:
+  # Radarr (make sure firewall allows port 7878 traffic)
+  - hostname: <RADARR_DOMAIN>
+    service: http://<RADARR_HOST>:7878
+
+  # Sonarr (make sure firewall allows port 8989 traffic)
+  - hostname: <SONARR_DOMAIN>
+    service: http://<SONARR_HOST>:8989
+
+  # Jellyfin (direct, it has its own network)
+  - hostname: <JELLYFIN_DOMAIN>
+    service: http://<JELLYFIN_HOST>:8096
+
+  # Default catch-all
+  - service: http_status:404

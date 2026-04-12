@@ -5,3 +5,9 @@ downloads/
 movies/
 tv/
 data/
+
+admin/.admin.env
+immich/.immich.env
+media/.media.env
+utils/.utils.env
+.new.env

@@ -1,0 +1,32 @@
+name: admin
+networks:
+  homelab_network:
+    external: true
+services:
+  portainer:
+    container_name: portainer
+    image: portainer/portainer-ce:2.33.6
+    env_file:
+      - ../.env
+      - .admin.env
+    networks:
+      - homelab_network
+    ports:
+      - 9444:9443
+    volumes:
+      - ${CONFIG_DIR}/portainer:/data
+      - /var/run/docker.sock:/var/run/docker.sock
+    restart: unless-stopped
+  cloudflared:
+    image: cloudflare/cloudflared:2025.11.1
+    container_name: cloudflared
+    env_file:
+      - ../.env
+      - .admin.env
+    restart: unless-stopped
+    networks:
+      - homelab_network
+    volumes:
+      - ${CONFIG_DIR}/cloudflared/config.yml:/etc/cloudflared/config.yml:ro
+      - ${CONFIG_DIR}/cloudflared/${TUNNEL_ID}.json:/etc/cloudflared/${TUNNEL_ID}.json:ro
+    command: tunnel --no-autoupdate run

@@ -1,0 +1,66 @@
+name: utils
+services:
+  # clipcascade:
+  #   container_name: 
+  #   env_file:
+  #     - ../.env
+  #   image: sathvikrao/clipcascade:0.7.0
+  #   ports:
+  #     - "8002:8080" 
+  #   restart: unless-stopped
+  #   volumes:
+  #     - ${CONFIG_DIR}/clipcascade:/database  # Persistent storage for user data
+  #   environment:
+  #     - CC_MAX_MESSAGE_SIZE_IN_MiB=4  # Maximum message size in MiB (ignored if P2P mode is enabled)
+  #     - CC_P2P_ENABLED=false  # Enables or disables peer-to-peer(P2P) mode
+  #     # - CC_ALLOWED_ORIGINS=https://clipcascade.example.com  # Defines allowed CORS origins for security
+  #     # - CC_SIGNUP_ENABLED=false  # Enables or disables user self-registration
+  open-webui:
+    image: ghcr.io/open-webui/open-webui:main
+    container_name: open-webui
+    env_file:
+      - ../.env
+    restart: unless-stopped
+    environment:
+      - OLLAMA_BASE_URL=http://host.docker.internal:11434
+    ports:
+      - "11433:8080"
+    volumes:
+      - ${CONFIG_DIR}/open-webui:/app/backend/data
+  icloudpd:
+    container_name: icloudpd
+    env_file:
+      - ../.env
+      - .media.env
+    image: icloudpd/icloudpd:1.32.2
+    restart: unless-stopped
+    ports:
+      - "9099:8080"
+    volumes:
+      - ${ICLOUD_LIBRARY_PATH}:/data:rw
+      - ${CONFIG_DIR}/icloudpd:/config
+    environment:
+      - TZ=America/Louisville
+      - PUID=${PUID}
+      - PGID=${PGID}
+    command:
+      [
+        "icloudpd",
+        "--directory", "/data",
+        "--watch-with-interval", "3600",
+        "--mfa-provider", "webui",
+        "--password-provider", "webui",
+        "--smtp-host", "${ICLOUDPD_SMTP_HOST}",
+        "--smtp-username", "${ICLOUDPD_SMTP_USERNAME}",
+        "--smtp-password", "${ICLOUDPD_SMTP_PASSWORD}",
+        "--smtp-port", "${ICLOUDPD_SMTP_PORT}",
+        "--username", "${ICLOUDPD_USERNAME}",
+        "--cookie-directory", "/config",
+        "--set-exif-datetime",
+        "--auto-delete"
+      ]
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q --spider http://127.0.0.1:8080/ || exit 1"]
+      interval: 60s
+      timeout: 10s
+      retries: 3
