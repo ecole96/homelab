@@ -17,7 +17,7 @@
     **Folder Permissions**  
     Ensure media server folders have the right permissions (run from project root):  
         `sudo chown -R your-docker-user-here:your-docker-group-here ./data`  
-        `sudo chmod -R a=,a+rX,u+w,g+w /data`
+        `sudo chmod -R a=,a+rX,u+w,g+w ./data`
 
     **Jellyfin**
     1. Set up libraries

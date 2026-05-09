@@ -7,7 +7,7 @@ services:
     container_name: portainer
     image: portainer/portainer-ce:2.33.6
     env_file:
-      - ../.env
+      - ../.new.env
       - .admin.env
     networks:
       - homelab_network
@@ -21,7 +21,7 @@ services:
     image: cloudflare/cloudflared:2025.11.1
     container_name: cloudflared
     env_file:
-      - ../.env
+      - ../.new.env
       - .admin.env
     restart: unless-stopped
     networks:

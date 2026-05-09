@@ -8,7 +8,7 @@ services:
     networks:
       - homelab_network
     env_file:
-      - ../.env
+      - ../.new.env
       - .media.env
     container_name: gluetun
     # line above must be uncommented to allow external containers to connect.
@@ -48,7 +48,7 @@ services:
     image: lscr.io/linuxserver/prowlarr:2.3.0
     container_name: prowlarr
     env_file:
-      - ../.env
+      - ../.new.env
     network_mode: "service:gluetun"
     environment:
       - TZ=America/Louisville
@@ -63,7 +63,7 @@ services:
     restart: unless-stopped
     container_name: radarr
     env_file:
-      - ../.env
+      - ../.new.env
       - .media.env
     network_mode: "service:gluetun"
     volumes:
@@ -80,7 +80,7 @@ services:
     restart: unless-stopped
     container_name: sonarr
     env_file:
-      - ../.env
+      - ../.new.env
       - .media.env
     network_mode: "service:gluetun"
     volumes:
@@ -97,7 +97,7 @@ services:
     image: lscr.io/linuxserver/qbittorrent:5.1.4
     container_name: qbittorrent
     env_file:
-      - ../.env
+      - ../.new.env
       - .media.env
     network_mode: "service:gluetun"
     environment:
@@ -115,7 +115,7 @@ services:
   #   image: lscr.io/linuxserver/jellyfin:latest
   #   container_name: jellyfin
   #   env_file:
-  #     - ../.env
+  #     - ../.new.env
   #     - .media.env
   #   networks:
   #     - homelab_network
