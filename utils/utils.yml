@@ -31,7 +31,7 @@ services:
     container_name: icloudpd
     env_file:
       - ../.new.env
-      - .util.env
+      - .utils.env
     image: icloudpd/icloudpd:1.32.2
     restart: unless-stopped
     ports:
