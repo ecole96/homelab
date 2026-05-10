@@ -22,7 +22,7 @@ services:
       - 8090:8090 # qbittorrent web UI
       - 8191:8191 # flaresolverr
     volumes:
-      - ./config/gluetun:/gluetun
+      - ${CONFIG_DIR}/gluetun:/gluetun
     restart: unless-stopped
     environment:
       # See https://github.com/qdm12/gluetun-wiki/tree/main/setup#setup
@@ -49,7 +49,7 @@ services:
       - PUID=${PUID}
       - PGID=${PGID}
     volumes:
-      - ./config/prowlarr:/config
+      - ${CONFIG_DIR}/prowlarr:/config
     restart: unless-stopped
     depends_on:
       - gluetun
@@ -58,8 +58,8 @@ services:
     container_name: radarr
     network_mode: "service:gluetun"
     volumes:
-      - ./config/radarr:/config
-      - ./data:/data
+      - ${CONFIG_DIR}/radarr:/config
+      - ${MEDIA_DIR}:/data
     environment:
       - TZ=America/Louisville
       - PUID=${PUID}
@@ -72,8 +72,8 @@ services:
     container_name: sonarr
     network_mode: "service:gluetun"
     volumes:
-      - ./config/sonarr:/config
-      - ./data:/data
+      - ${CONFIG_DIR}/sonarr:/config
+      - ${MEDIA_DIR}:/data
     environment:
       - TZ=America/Louisville
       - PUID=${PUID}
@@ -91,8 +91,8 @@ services:
       - PUID=${PUID}
       - PGID=${PGID}
     volumes:
-      - ./config/qbittorrent:/config
-      - ./data/torrents:/data/torrents
+      - ${CONFIG_DIR}/qbittorrent:/config
+      - ${MEDIA_DIR}/torrents:/data/torrents
     restart: unless-stopped
     depends_on:
       - gluetun
@@ -107,8 +107,8 @@ services:
   #     - PGID=${PGID}
   #     - UMASK_SET=022 # optional
   #   volumes:
-  #     - ./config/jellyfin:/config
-  #     - ./data/media:/data/media
+  #     - ${CONFIG_DIR}/jellyfin:/config
+  #     - ${MEDIA_DIR}/media:/data/media
   #   ports:
   #     - 8096:8096
   #   restart: unless-stopped
@@ -129,7 +129,7 @@ services:
     ports:
       - 9444:9443
     volumes:
-      - ./config/portainer:/data
+      - ${CONFIG_DIR}/portainer:/data
       - /var/run/docker.sock:/var/run/docker.sock
     restart: unless-stopped
   cloudflared:
@@ -139,8 +139,8 @@ services:
     networks:
       - homelab
     volumes:
-      - ./config/cloudflared/config.yml:/etc/cloudflared/config.yml:ro
-      - ./config/cloudflared/${TUNNEL_ID}.json:/etc/cloudflared/${TUNNEL_ID}.json:ro
+      - ${CONFIG_DIR}/cloudflared/config.yml:/etc/cloudflared/config.yml:ro
+      - ${CONFIG_DIR}/cloudflared/${TUNNEL_ID}.json:/etc/cloudflared/${TUNNEL_ID}.json:ro
     command: tunnel --no-autoupdate run
   # clipcascade:
   #   container_name: clipcascade
@@ -149,56 +149,56 @@ services:
   #     - "8002:8080" 
   #   restart: unless-stopped
   #   volumes:
-  #     - ./config/clipcascade:/database  # Persistent storage for user data
+  #     - ${CONFIG_DIR}/clipcascade:/database  # Persistent storage for user data
   #   environment:
   #     - CC_MAX_MESSAGE_SIZE_IN_MiB=4  # Maximum message size in MiB (ignored if P2P mode is enabled)
   #     - CC_P2P_ENABLED=false  # Enables or disables peer-to-peer(P2P) mode
   #     # - CC_ALLOWED_ORIGINS=https://clipcascade.example.com  # Defines allowed CORS origins for security
   #     # - CC_SIGNUP_ENABLED=false  # Enables or disables user self-registration
-  open-webui:
-    image: ghcr.io/open-webui/open-webui:main
-    container_name: open-webui
-    restart: unless-stopped
-    environment:
-      - OLLAMA_BASE_URL=http://host.docker.internal:11434
-    ports:
-      - "11433:8080"
-    volumes:
-      - ./config/open-webui:/app/backend/data
-  icloudpd:
-    container_name: icloudpd
-    image: icloudpd/icloudpd:1.32.2
-    restart: unless-stopped
-    ports:
-      - "9099:8080"
-    volumes:
-      - ${ICLOUD_LIBRARY_PATH}:/data:rw
-      - ./config/icloudpd:/config
-    environment:
-      - TZ=America/Louisville
-      - PUID=${PUID}
-      - PGID=${PGID}
-    command:
-      [
-        "icloudpd",
-        "--directory", "/data",
-        "--watch-with-interval", "3600",
-        "--mfa-provider", "webui",
-        "--password-provider", "webui",
-        "--smtp-host", "${ICLOUDPD_SMTP_HOST}",
-        "--smtp-username", "${ICLOUDPD_SMTP_USERNAME}",
-        "--smtp-password", "${ICLOUDPD_SMTP_PASSWORD}",
-        "--smtp-port", "${ICLOUDPD_SMTP_PORT}",
-        "--username", "${ICLOUDPD_USERNAME}",
-        "--cookie-directory", "/config",
-        "--set-exif-datetime",
-        "--auto-delete"
-      ]
-    healthcheck:
-      test: ["CMD-SHELL", "wget -q --spider http://127.0.0.1:8080/ || exit 1"]
-      interval: 60s
-      timeout: 10s
-      retries: 3
+  # open-webui:
+  #   image: ghcr.io/open-webui/open-webui:main
+  #   container_name: open-webui
+  #   restart: unless-stopped
+  #   environment:
+  #     - OLLAMA_BASE_URL=http://host.docker.internal:11434
+  #   ports:
+  #     - "11433:8080"
+  #   volumes:
+  #     - ${CONFIG_DIR}/open-webui:/app/backend/data
+  # icloudpd:
+  #   container_name: icloudpd
+  #   image: icloudpd/icloudpd:1.32.2
+  #   restart: unless-stopped
+  #   ports:
+  #     - "9099:8080"
+  #   volumes:
+  #     - ${ICLOUD_LIBRARY_PATH}:/data:rw
+  #     - ${CONFIG_DIR}/icloudpd:/config
+  #   environment:
+  #     - TZ=America/Louisville
+  #     - PUID=${PUID}
+  #     - PGID=${PGID}
+  #   command:
+  #     [
+  #       "icloudpd",
+  #       "--directory", "/data",
+  #       "--watch-with-interval", "3600",
+  #       "--mfa-provider", "webui",
+  #       "--password-provider", "webui",
+  #       "--smtp-host", "${ICLOUDPD_SMTP_HOST}",
+  #       "--smtp-username", "${ICLOUDPD_SMTP_USERNAME}",
+  #       "--smtp-password", "${ICLOUDPD_SMTP_PASSWORD}",
+  #       "--smtp-port", "${ICLOUDPD_SMTP_PORT}",
+  #       "--username", "${ICLOUDPD_USERNAME}",
+  #       "--cookie-directory", "/config",
+  #       "--set-exif-datetime",
+  #       "--auto-delete"
+  #     ]
+  #   healthcheck:
+  #     test: ["CMD-SHELL", "wget -q --spider http://127.0.0.1:8080/ || exit 1"]
+  #     interval: 60s
+  #     timeout: 10s
+  #     retries: 3
   immich-server:
     container_name: immich-server
     image: ghcr.io/immich-app/immich-server:${IMMICH_VERSION:-release}
@@ -211,7 +211,7 @@ services:
       # Do not edit the next line. If you want to change the media storage location on your system, edit the value of UPLOAD_LOCATION in the .env file
       - ${UPLOAD_LOCATION}:/data
       - /etc/localtime:/etc/localtime:ro
-      - ${ICLOUD_LIBRARY_PATH}:/icloud:ro
+      - ${ICLOUD_LIBRARY_PATH}:/icloud-photos-library:ro
     ports:
       - '2283:2283'
     depends_on:
@@ -229,7 +229,7 @@ services:
     #   file: hwaccel.ml.yml
     #   service: cpu # set to one of [armnn, cuda, rocm, openvino, openvino-wsl, rknn] for accelerated inference - use the `-wsl` version for WSL2 where applicable
     volumes:
-      - ./config/immich-machine-learning:/cache
+      - ${CONFIG_DIR}/immich-machine-learning:/cache
     env_file:
       - .env
     restart: unless-stopped
